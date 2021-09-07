@@ -23,6 +23,9 @@ let upload = {
 
 };
 
+let board = "arduino:avr:unowifi"
+let port = ""
+
 let operations = [version, board_list, compile, upload];
 
 server.get('/operations/:name', function (req, res) {
@@ -39,28 +42,32 @@ server.get('/operations/:name', function (req, res) {
            return sync;
         }
 
-        let tmp_msg;
         if(result.name == 'board_list'){
 
             const sync = cmd.runSync('arduino-cli board list');
             console.log(sync.data);
+            //var insert = fs.readFileSync('./board_info.html', {encoding: 'utf8'});
             return sync;
         }
 
         if(result.name == 'compile'){
 
-            const sync = cmd.runSync('arduino-cli compile --fqbn arduino:avr:unowifi Sketch');
+            port = req.query.port;
+            board = req.query.board_name;
+            //const sync = cmd.runSync('arduino-cli compile --fqbn '+board+' Sketch')
+
+            const sync = cmd.runSync('arduino-cli compile --fqbn arduino:avr:uno Sketch');
             console.log(sync.data);
             return sync;
         }
 
         if(result.name == 'upload'){
-            cmd.run(
-                `arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:unowifi Sketch`,
-                function(err, data, stderr){
-                    console.log(data)
-                }
+            const sync = cmd.runSync(
+                //'arduino-cli upload -p '+port+' --fqbn '+board+' Sketch'
+                'arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:abr:uno Sketch'
             );
+            console.log(sync.data);
+            res.send(sync.data);
         }
     };
 });
