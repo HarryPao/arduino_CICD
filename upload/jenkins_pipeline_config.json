@@ -1,5 +1,6 @@
 {
     "remote_repository":"https://github.com/HarryPao/arduino_CICD.git",
+    "remote_repository_branch":"main",
     "IoTGateway_IPAddress&Port":"172.20.10.3:3000",
     "target_board_name":"arduino:avr:uno",
     "target_board_port":"/dev/ttyACM0"
